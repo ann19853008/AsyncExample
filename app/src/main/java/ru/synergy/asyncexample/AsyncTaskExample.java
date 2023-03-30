@@ -19,7 +19,7 @@ public class AsyncTaskExample extends AppCompatActivity {
     private Button mStartButton;
     private ProgressBar mHorizontalProgressBar;
 
-    @SuppressLint("MissingInflatedId")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +27,7 @@ public class AsyncTaskExample extends AppCompatActivity {
 
         mInfoTextView = (TextView) findViewById(R.id.text_info);
         mStartButton = (Button) findViewById(R.id.button_start);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mHorizontalProgressBar = findViewById(R.id.progressBar);
 
 
     }
@@ -71,7 +71,7 @@ public class AsyncTaskExample extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void unused) {
             mInfoTextView.setText("Звонок в дверь.Заберите вашу пиццу.");
-            mStartButton.setVisibility(View.INVISIBLE);
+            mStartButton.setVisibility(View.VISIBLE);
             mHorizontalProgressBar.setProgress(0);
         }
 
