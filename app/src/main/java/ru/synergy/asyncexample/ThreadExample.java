@@ -10,7 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+
 public class ThreadExample extends AppCompatActivity {
+
+
+
 
     int mCounter;
 
@@ -55,5 +61,6 @@ public class ThreadExample extends AppCompatActivity {
         };
         Thread thread = new Thread(runnable);
         thread.start();
+
     }
 }
