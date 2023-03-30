@@ -2,48 +2,81 @@ package ru.synergy.asyncexample;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.concurrent.TimeUnit;
 
 public class AsyncTaskExample extends AppCompatActivity {
 
+    private TextView mInfoTextView;
+    private ProgressBar mProgressBar;
+    private Button mStartButton;
+    private ProgressBar mHorizontalProgressBar;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_async_task_example);
-        MyAsyncTask asyncTask = new MyAsyncTask();
-        asyncTask.execute("Hello World!");
+
+        mInfoTextView = (TextView) findViewById(R.id.text_info);
+        mStartButton = (Button) findViewById(R.id.button_start);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+
     }
 
 
     public void onClick(View view) {
-        //TODO
+        CurierTask curierTask = new CurierTask();
+        curierTask.execute();
+    }
+
+
+    class CurierTask extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected void onPreExecute() {
+            mInfoTextView.setText("Доставщик зашел в ваш дом");
+            mStartButton.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            mInfoTextView.setText("Этаж" + values[0]);
+            mHorizontalProgressBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                int numerofFloors = 14;
+                int counter = 0;
+                for ( int i = 0; i<numerofFloors; i++){
+                    getfloor(counter);
+                    publishProgress(++counter);
+                }
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            mInfoTextView.setText("Звонок в дверь.Заберите вашу пиццу.");
+            mStartButton.setVisibility(View.INVISIBLE);
+            mHorizontalProgressBar.setProgress(0);
+        }
+
+        private void getfloor(int counter) throws InterruptedException {
+            TimeUnit.SECONDS.sleep(1);
+        }
     }
 }
-     class MyAsyncTask extends AsyncTask<String, Integer, Integer> {
-
-         @Override
-         protected Integer doInBackground(String... strings) {
-             int myProgress = 0;
-             publishProgress(myProgress);
-             int result= myProgress++;
-             return result;
-         }
-
-         @Override
-         protected void onProgressUpdate(Integer... values) {
-             super.onProgressUpdate(values);
-         }
-
-         @Override
-         protected void onPreExecute() {
-             super.onPreExecute();
-         }
-
-         @Override
-         protected void onPostExecute(Integer integer) {
-             super.onPostExecute(integer);
-         }
-     }
